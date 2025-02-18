@@ -139,3 +139,59 @@ SELECT o.order_id, o.customer_id, os.order_status_id, s.first_name, os.name
 
 -- composite join is when you use a table contain more than on primary ket to identify a record
 -- you need to JOIN ON all primary keys with wanted table
+
+-- outer join is used to show record the don't fullfil the joining condition, left joining means show
+-- all records from left table and same goes for right joining.
+
+SELECT oi.order_id, p.product_id, oi.quantity, oi.unit_price 
+FROM order_items oi 
+ RIGHT JOIN products p
+--   on oi.product_id = p.product_id
+    USING(product_id)
+
+
+-- ========================
+
+
+SELECT c.client_id, c.name,p.payment_id, p.amount,p.date,pm.name FROM
+ `payments` p 
+   JOIN clients c
+    USING(client_id)
+     JOIN payment_methods pm 
+      on p.payment_method = pm.payment_method_id
+
+--! ================ unions: used to combine or merge two queries ==================
+
+
+SELECT order_id, customer_id, order_date, "Active"
+ AS STATUS FROM orders
+  WHERE order_date >= "2019-01-01"
+   UNION
+     SELECT order_id, customer_id, order_date, "Archived"
+      AS STATUS FROM orders
+       WHERE order_date <= "2019-01-01"
+
+
+
+
+--! ================ updating in SQL ============================================
+
+USE invoicing
+
+SELECT * FROM invoices;
+
+UPDATE invoices
+ SET  invoice_date = "2025-01-01"
+  WHERE invoice_id = 2;
+
+-- ==============================
+
+USE store
+
+SELECT * FROM customers
+
+
+UPDATE customers
+ SET points = points + 50
+  WHERE birth_date < "1990-01-01"
+   
